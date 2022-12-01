@@ -1,10 +1,13 @@
 import fs from "fs";
+import { staticVars } from "./utils.js";
 
 let year = "2022";
 let day = "01";
 let part = 0; //0 = both
 
 const dayFolderPath = "./" + year + "/" + day + "/";
+staticVars.path = dayFolderPath;
+
 const dayModule = await import(dayFolderPath + "index.js");
 
 const inputText = fs.readFileSync(dayFolderPath + "input", "utf-8");

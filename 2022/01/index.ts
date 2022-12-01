@@ -16,11 +16,14 @@ export const solve = (inputText: string) => {
 
   return {
     part1: () => {
-      solution(Math.max(...elfCalories));
+      solution(Math.max(...elfCalories), 1);
     },
 
     part2: () => {
-      solution(elfCalories.splice(0, 3).reduce((part, a) => part + a, 0));
+      solution(
+        elfCalories.splice(0, 3).reduce((part, a) => part + a, 0),
+        2
+      );
     },
   };
 };
