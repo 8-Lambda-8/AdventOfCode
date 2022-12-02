@@ -1,4 +1,5 @@
 import fs from "fs";
+import { exit } from "process";
 import { solution, staticVars } from "./utils.js";
 
 let year = "2022";
@@ -9,6 +10,18 @@ let test = -1; //-1= full, 0=testInput_0,...
 
 const dayFolderPath = "./" + year + "/" + day + "/";
 staticVars.path = dayFolderPath;
+
+let stopAfterInit = false;
+
+if (!fs.existsSync(dayFolderPath + "index.ts")) {
+  fs.mkdirSync(dayFolderPath, { recursive: true });
+  fs.copyFileSync("template.ts", dayFolderPath + "index.ts");
+
+  console.log("Created Template");
+  stopAfterInit = true;
+}
+
+if (stopAfterInit) exit();
 
 const dayModule = await import(dayFolderPath + "index.js");
 
