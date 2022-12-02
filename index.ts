@@ -7,10 +7,12 @@ let year = "2022";
 let day = "02";
 let part = 0; //0 = both
 
-let test = -1; //-1= full, 0=testInput_0,...
+let test = -1; //-1= full, 0=testInput_0, ...
 
 const dayFolderPath = "./" + year + "/" + day + "/";
 staticVars.path = dayFolderPath;
+staticVars.test = test;
+const urlDay = `https://adventofcode.com/${year}/day/${parseInt(day)}`;
 
 let stopAfterInit = false;
 
@@ -22,11 +24,9 @@ if (!fs.existsSync(dayFolderPath + "index.ts")) {
   stopAfterInit = true;
 }
 
-if (!fs.existsSync(dayFolderPath + "input")) {
-  const url = `https://adventofcode.com/${year}/day/${parseInt(day)}`;
-
-  let [input, statusCode] = await new Promise<[string, number]>((resolve, reject) => {
-    const req = https.request(url + "/input", (response) => {
+function getFileFromUrl(url: string) {
+  return new Promise<[string, number]>((resolve, reject) => {
+    const req = https.request(url, (response) => {
       const statusCode = response.statusCode ?? 404;
       let result = "";
 
@@ -46,6 +46,10 @@ if (!fs.existsSync(dayFolderPath + "input")) {
     req.on("error", reject);
     req.end();
   });
+}
+
+if (!fs.existsSync(dayFolderPath + "input")) {
+  let [input, statusCode] = await getFileFromUrl(urlDay + "/input");
 
   if (statusCode != 200) {
     console.log("error loading input file");
@@ -59,6 +63,34 @@ if (!fs.existsSync(dayFolderPath + "input")) {
 
   while (input.endsWith("\n")) input = input.slice(0, -1);
   fs.writeFileSync(dayFolderPath + "input", input);
+}
+
+if (!fs.existsSync(dayFolderPath + "testInput_0")) {
+  let [page, statusCode] = await getFileFromUrl(urlDay);
+
+  const regex = new RegExp("<pre><code>([\\s\\S]*?)<\\/code><\\/pre>", "mgi");
+
+  if (statusCode != 200) {
+    console.log("error loading testInputs");
+    stopAfterInit = true;
+  }
+
+  let i = 0;
+  let m;
+  while ((m = regex.exec(page)) !== null) {
+    if (m.index === regex.lastIndex) {
+      regex.lastIndex++;
+    }
+    let match = m[1];
+    while (match.endsWith("\n")) match = match.slice(0, -1);
+
+    fs.writeFileSync(dayFolderPath + "testInput_" + i, match);
+    i++;
+  }
+  if (!fs.existsSync(dayFolderPath + "testInput_0")) {
+    console.log("no test Inputs found");
+    stopAfterInit = true;
+  }
 }
 
 if (stopAfterInit) exit();
