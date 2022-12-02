@@ -3,36 +3,51 @@ import { solution } from "../../utils.js";
 export const solve = (inputText: string) => {
   const roundsArray = inputText.split("\n");
 
-  let score = 0;
+  let score1 = 0;
+  let score2 = 0;
 
   const shapeScore = { X: 1, Y: 2, Z: 3 };
 
+  type abcType = "A" | "B" | "C";
+  type xyzType = "X" | "Y" | "Z";
+
+  const shapeTable2 = {
+    X: { A: "Z", B: "X", C: "Y" }, //loose
+    Y: { A: "X", B: "Y", C: "Z" }, //draw
+    Z: { A: "Y", B: "Z", C: "X" }, //win
+  } as { [key: string]: { [key: string]: xyzType } };
+
+  const resultTable2 = { X: 0, Y: 3, Z: 6 };
+
   for (const round of roundsArray) {
-    const [oponent, player] = round.split(" ") as ["A" | "B" | "C", "X" | "Y" | "Z"];
-    score += shapeScore[player];
+    const [oponent, player] = round.split(" ") as [abcType, xyzType];
+    score1 += shapeScore[player];
 
     if (
       (oponent == "A" && player == "Y") ||
       (oponent == "B" && player == "Z") ||
       (oponent == "C" && player == "X")
     )
-      score += 6;
+      score1 += 6;
     else if (
       (oponent == "A" && player == "X") ||
       (oponent == "B" && player == "Y") ||
       (oponent == "C" && player == "Z")
     ) {
-      score += 3;
-    } else score += 0;
+      score1 += 3;
+    } else score1 += 0;
+
+    score2 += shapeScore[shapeTable2[player][oponent]];
+    score2 += resultTable2[player];
   }
 
   return {
     part1: () => {
-      solution(score, 1);
+      solution(score1, 1);
     },
 
     part2: () => {
-      solution(0, 2);
+      solution(score2, 2);
     },
   };
 };
