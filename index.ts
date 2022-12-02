@@ -59,10 +59,10 @@ if (!fs.existsSync(dayFolderPath + "input")) {
   if (input.startsWith("Please don't")) {
     console.log("you are too early");
     stopAfterInit = true;
+  } else {
+    while (input.endsWith("\n")) input = input.slice(0, -1);
+    fs.writeFileSync(dayFolderPath + "input", input);
   }
-
-  while (input.endsWith("\n")) input = input.slice(0, -1);
-  fs.writeFileSync(dayFolderPath + "input", input);
 }
 
 if (!fs.existsSync(dayFolderPath + "testInput_0")) {
