@@ -1,5 +1,3 @@
-import { solution } from "../../utils.js";
-
 export const solve = (inputText: string) => {
   const elfBlocks = inputText.split("\n\n");
 
