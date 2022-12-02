@@ -2,7 +2,7 @@ import fs from "fs";
 import { staticVars } from "./utils.js";
 
 let year = "2022";
-let day = "01";
+let day = "02";
 let part = 0; //0 = both
 
 const dayFolderPath = "./" + year + "/" + day + "/";
