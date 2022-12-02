@@ -1,18 +1,18 @@
 import fs from "fs";
 import { exit } from "process";
-import { solution, staticVars } from "./utils.js";
+import { padWithZero, solution, staticVars } from "./utils.js";
 import https from "https";
 
-let year = "2022";
-let day = "02";
+let year = 2022;
+let day = 2;
 let part = 0; //0 = both
 
 let test = -1; //-1= full, 0=testInput_0, ...
 
-const dayFolderPath = "./" + year + "/" + day + "/";
+const dayFolderPath = `./${year}/${padWithZero(day, 2)}/`;
 staticVars.path = dayFolderPath;
 staticVars.test = test;
-const urlDay = `https://adventofcode.com/${year}/day/${parseInt(day)}`;
+const urlDay = `https://adventofcode.com/${year}/day/${day}`;
 
 let stopAfterInit = false;
 
