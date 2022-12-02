@@ -43,11 +43,11 @@ export const solve = (inputText: string) => {
 
   return {
     part1: () => {
-      solution(score1, 1);
+      return score1.toString()
     },
 
     part2: () => {
-      solution(score2, 2);
+      return score2.toString()
     },
   };
 };

@@ -1,5 +1,5 @@
 import fs from "fs";
-import { staticVars } from "./utils.js";
+import { solution, staticVars } from "./utils.js";
 
 let year = "2022";
 let day = "02";
@@ -24,15 +24,13 @@ const { part1, part2 } = dayModule.solve(inputText);
 
 if (part !== 2) {
   console.log("Part1:\n");
-  part1();
-  console.log("\n");
+  solution(part1(), 1);
 }
 
 if (part !== 1) {
   console.log("Part2:\n");
-  part2();
-  console.log("\n");
+  solution(part2(), 2);
 }
 
 const timeEnd = performance.now();
-console.log(`\n took ${timeEnd - timeStart}ms`);
+console.log(`\ntook ${timeEnd - timeStart}ms`);
