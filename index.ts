@@ -1,6 +1,7 @@
 import fs from "fs";
 import { exit } from "process";
 import { solution, staticVars } from "./utils.js";
+import https from "https";
 
 let year = "2022";
 let day = "02";
@@ -19,6 +20,45 @@ if (!fs.existsSync(dayFolderPath + "index.ts")) {
 
   console.log("Created Template");
   stopAfterInit = true;
+}
+
+if (!fs.existsSync(dayFolderPath + "input")) {
+  const url = `https://adventofcode.com/${year}/day/${parseInt(day)}`;
+
+  let [input, statusCode] = await new Promise<[string, number]>((resolve, reject) => {
+    const req = https.request(url + "/input", (response) => {
+      const statusCode = response.statusCode ?? 404;
+      let result = "";
+
+      response.on("data", (chunk) => {
+        result += chunk;
+      });
+
+      response.on("end", () => resolve([result, statusCode]));
+      response.on("error", reject);
+    });
+
+    req.setHeader(
+      "cookie",
+      `session=${JSON.parse(fs.readFileSync("./session.json", "utf-8")).session}`
+    );
+
+    req.on("error", reject);
+    req.end();
+  });
+
+  if (statusCode != 200) {
+    console.log("error loading input file");
+    stopAfterInit = true;
+  }
+
+  if (input.startsWith("Please don't")) {
+    console.log("you are too early");
+    stopAfterInit = true;
+  }
+
+  while (input.endsWith("\n")) input = input.slice(0, -1);
+  fs.writeFileSync(dayFolderPath + "input", input);
 }
 
 if (stopAfterInit) exit();
