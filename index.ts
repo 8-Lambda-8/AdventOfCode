@@ -4,7 +4,7 @@ import { padWithZero, solution, staticVars } from "./utils.js";
 import https from "https";
 
 let year = 2022;
-let day = 2;
+let day = 3;
 let part = 0; //0 = both
 
 let test = -1; //-1= full, 0=testInput_0, ...
