@@ -7,7 +7,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Debug Program",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/out/index.js",
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "args": ["test"],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/out/index.js",
       "preLaunchTask": "tsc: build - tsconfig.json",

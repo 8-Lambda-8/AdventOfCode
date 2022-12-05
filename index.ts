@@ -8,6 +8,9 @@ let day = 4;
 let part = 0; //0 = both
 
 let test = -1; //-1= full, 0=testInput_0, ...
+if (process.argv.find((a) => a == "test")) {
+  test = 0;
+}
 
 const dayFolderPath = `./${year}/${padWithZero(day, 2)}/`;
 staticVars.path = dayFolderPath;
