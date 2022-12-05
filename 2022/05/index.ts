@@ -26,15 +26,17 @@ export const solve = (inputText: string) => {
     }
   }
 
-  for (const instruction of instructionLines) {
-    for (let count = 0; count < instruction.count; count++) {
-      if (stack[instruction.from - 1].length > 0)
-        stack[instruction.to - 1].push(stack[instruction.from - 1].pop()!);
-    }
-  }
+  let stack2 = JSON.parse(JSON.stringify(stack));
 
   return {
     part1: () => {
+      for (const instruction of instructionLines) {
+        for (let count = 0; count < instruction.count; count++) {
+          if (stack[instruction.from - 1].length > 0)
+            stack[instruction.to - 1].push(stack[instruction.from - 1].pop()!);
+        }
+      }
+
       let out = "";
       for (const stackColum in stack) {
         out += stack[stackColum].slice(-1)[0];
@@ -43,7 +45,20 @@ export const solve = (inputText: string) => {
     },
 
     part2: () => {
-      return "";
+      for (const instruction of instructionLines) {
+        //if (stack[instruction.from - 1].length >= instruction.count)
+        const grab = stack2[instruction.from - 1].splice(
+          stack2[instruction.from - 1].length - instruction.count
+        );
+
+        stack2[instruction.to - 1].push(...grab);
+      }
+
+      let out = "";
+      for (const stackColum in stack2) {
+        out += stack2[stackColum].slice(-1)[0];
+      }
+      return out.toString();
     },
   };
 };
