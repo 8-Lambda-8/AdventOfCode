@@ -27,23 +27,34 @@ export const solve = (inputText: string) => {
     }
   }
 
-  let solution1 = 0;
-  for (const path in filesystem) {
+  function getContainingSize(path: string) {
     let containingSize = 0;
     const childFolders = Object.keys(filesystem).filter((p) => p.startsWith(path)) ?? [];
     for (const child of childFolders) {
       containingSize += filesystem[child];
     }
-    if (containingSize < 100000) solution1 += containingSize;
+    return containingSize;
   }
 
   return {
     part1: () => {
+      let solution1 = 0;
+      for (const path in filesystem) {
+        let containingSize = getContainingSize(path);
+        if (containingSize < 100000) solution1 += containingSize;
+      }
       return solution1.toString();
     },
 
     part2: () => {
-      return "out".toString();
+      let requiredDelete = 30000000 - (70000000 - getContainingSize(""));
+      let choosenSize = 70000000;
+      for (const path in filesystem) {
+        let size = getContainingSize(path);
+        if (size >= requiredDelete) choosenSize = Math.min(size, choosenSize);
+      }
+
+      return choosenSize.toString();
     },
   };
 };
