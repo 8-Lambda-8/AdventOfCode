@@ -6,61 +6,65 @@ export const solve = (inputText: string) => {
     return { direction: split[0], distance: parseInt(split[1]) };
   });
 
-  let HeadPos = { x: 0, y: 0 };
-  let TailPos = { x: 0, y: 0 };
+  function move(ropeLength: number) {
+    function moveHead(direction: string) {
+      if (direction == "R") Rope[0].x++;
+      if (direction == "L") Rope[0].x--;
+      if (direction == "U") Rope[0].y++;
+      if (direction == "D") Rope[0].y--;
 
-  function HeadTailDistanceOkay() {
-    return Math.abs(HeadPos.x - TailPos.x) <= 1 && Math.abs(HeadPos.y - TailPos.y) <= 1;
-  }
+      for (let knotNumber = 1; knotNumber < Rope.length; knotNumber++) {
+        const previousKnot = Rope[knotNumber - 1];
+        const knot = Rope[knotNumber];
 
-  let tailVisited = new Set(["0,0"]);
+        const knotDistance = {
+          x: Rope[knotNumber - 1].x - Rope[knotNumber].x,
+          y: Rope[knotNumber - 1].y - Rope[knotNumber].y,
+        };
 
-  function move1(direction: string) {
-    if (direction == "R") HeadPos.x++;
-    if (direction == "L") HeadPos.x--;
-    if (direction == "U") HeadPos.y++;
-    if (direction == "D") HeadPos.y--;
+        if (Math.abs(knotDistance.x) <= 1 && Math.abs(knotDistance.y) <= 1) continue;
 
-    if (!HeadTailDistanceOkay()) {
-      if (direction == "R") {
-        TailPos.x = HeadPos.x - 1;
-        TailPos.y = HeadPos.y;
+        let yoffset = Math.min(Math.max(-1, previousKnot.y - knot.y), 1);
+        let xoffset = Math.min(Math.max(-1, previousKnot.x - knot.x), 1);
+        knot.y += yoffset;
+        knot.x += xoffset;
+
+        if (knotNumber == Rope.length - 1) tailVisited.add(knot.x + "," + knot.y);
       }
-      if (direction == "L") {
-        TailPos.x = HeadPos.x + 1;
-        TailPos.y = HeadPos.y;
-      }
-      if (direction == "U") {
-        TailPos.x = HeadPos.x;
-        TailPos.y = HeadPos.y - 1;
-      }
-      if (direction == "D") {
-        TailPos.x = HeadPos.x;
-        TailPos.y = HeadPos.y + 1;
-      }
-      tailVisited.add(TailPos.x + "," + TailPos.y);
     }
-  }
 
-  for (const line of lines) {
-    for (let dist = 0; dist < line.distance; dist++) {
-      move1(line.direction);
-      
-      /* plotXY({ xS: 0, xE: 5, yS: 0, yE: 5 }, ".", [
-        { x: HeadPos.x, y: HeadPos.y, char: "H", prio: 2 },
-        { x: TailPos.x, y: TailPos.y, char: "T", prio: 1 },
-        { x: 0, y: 0, char: "s", prio: 0 },
-      ]); */
+    let Rope = new Array<{ x: number; y: number }>();
+    for (let i = 0; i < ropeLength; i++) {
+      Rope.push({ x: 0, y: 0 });
     }
+
+    let tailVisited = new Set(["0,0"]);
+
+    for (const line of lines) {
+      line;
+      for (let dist = 0; dist < line.distance; dist++) {
+        moveHead(line.direction);
+
+        /* plotXY({ xS: -11 * 0, xE: 14 - 9, yS: -5 * 0, yE: 15 - 9 }, ".", [
+          ...Rope.map((k) => {
+            let index = Rope.indexOf(k);
+            let char = index == 0 ? "H" : index.toString();
+            return { x: k.x, y: k.y, char };
+          }),
+        ]); */
+        console.log(lines.lastIndexOf(line));
+      }
+    }
+    return tailVisited.size;
   }
 
   return {
     part1: () => {
-      return tailVisited.size.toString();
+      return move(2).toString();
     },
 
     part2: () => {
-      return "out".toString();
+      return move(10).toString();
     },
   };
 };
