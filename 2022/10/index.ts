@@ -1,3 +1,5 @@
+import { plotXY } from "../../utils.js";
+
 export const solve = (inputText: string) => {
   const instructions = inputText.split("\n");
 
@@ -5,7 +7,12 @@ export const solve = (inputText: string) => {
   let cycle = 0;
   let signalSum = 0;
 
+  let printedSymbols = new Array<{ x: number; y: number; char: string }>();
+
   function cycleUp() {
+    if (Math.abs((cycle % 40) - registerX) < 2) {
+      printedSymbols.push({ x: cycle % 40, y: Math.floor(cycle / 40), char: "#" });
+    }
     cycle++;
     checkSignal();
   }
@@ -31,7 +38,8 @@ export const solve = (inputText: string) => {
     },
 
     part2: () => {
-      return "out".toString();
+      plotXY({ xS: 0, xE: 39, yS: 0, yE: 5 }, ".", printedSymbols, true);
+      return "^^^".toString();
     },
   };
 };
