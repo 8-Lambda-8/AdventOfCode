@@ -1,5 +1,5 @@
 export const solve = (inputText: string) => {
-  const lines = inputText.split("\r\n");
+  const lines = inputText.split("\n");
 
   let foundCount = 0;
   let size = { x: lines[0].length, y: lines.length };
