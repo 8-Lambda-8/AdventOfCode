@@ -4,10 +4,19 @@ import { padWithZero, solution, staticVars } from "./utils.js";
 import https from "https";
 
 let year = 2024;
-let day = 9;
+let day = 0;
 let part = 0; //0 = both
 
 let test = -1; //-1= full, 0=testInput_0, ...
+
+const arg1 = +process.argv[2];
+if (!isNaN(arg1) && arg1 < 25 && arg1 > 0) {
+  day = arg1;
+} else {
+  console.log("wrong day argument");
+  process.exit(1);
+}
+
 if (process.argv.find((a) => a == "test")) {
   test = 0;
 }
