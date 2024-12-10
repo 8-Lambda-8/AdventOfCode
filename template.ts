@@ -1,5 +1,5 @@
 export const solve = (inputText: string) => {
-  const lines = inputText.split("\n"); 
+  const lines = inputText.split("\n");
 
   return {
     part1: () => {
