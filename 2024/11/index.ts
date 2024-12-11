@@ -1,5 +1,6 @@
 export const solve = (inputText: string) => {
   const stones = inputText.split(" ");
+  const stones2 = [...stones];
 
   console.log(stones);
 
@@ -23,7 +24,38 @@ export const solve = (inputText: string) => {
     },
 
     part2: () => {
-      return "out".toString();
+      const cache: Map<string, number> = new Map();
+
+      function recurseStones(stone: string, numBlinks: number) {
+        if (cache.has(`${stone},${numBlinks}`)) {
+          return cache.get(`${stone},${numBlinks}`)!;
+        }
+
+        if (numBlinks === 0) {
+          return 1;
+        } else {
+          let total = 0;
+          if (stone === "0") {
+            total = recurseStones("1", numBlinks - 1);
+          } else if (stone.length % 2 === 0) {
+            total =
+              recurseStones(stone.substring(0, stone.length / 2), numBlinks - 1) +
+              recurseStones((+stone.substring(stone.length / 2)).toString(), numBlinks - 1);
+          } else {
+            total = recurseStones((+stone * 2024).toString(), numBlinks - 1);
+          }
+          cache.set(`${stone},${numBlinks}`, total);
+          return total;
+        }
+      }
+
+      let total = 0;
+      for (let i = 0; i < stones2.length; i++) {
+        total += recurseStones(stones2[i], 75);
+      }
+      console.log();
+
+      return total.toString();
     },
   };
 };
